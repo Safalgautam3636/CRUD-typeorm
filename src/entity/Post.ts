@@ -9,7 +9,7 @@ export class Post {
     @Column()
     title: string;
 
-    @Column({})
+    @Column()
     content: string;
 
     @CreateDateColumn({name:"created_at"})

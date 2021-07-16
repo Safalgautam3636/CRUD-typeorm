@@ -2,8 +2,9 @@ import { RequestHandler } from 'express';
 import {User} from '../entity/User';
 import {validate} from 'class-validator'
 import { getRepository } from 'typeorm';
+import verify,{DefineType} from '../entity/Verify'
 class AuthController{
-    static login:RequestHandler=async(req,res)=>{
+    static login:RequestHandler=async(req:DefineType,res)=>{
         const{email,password}=req.body;
         const useRepository=getRepository(User);
         let user:User;
@@ -12,7 +13,8 @@ class AuthController{
             if(user&&!user.isValidPassword(password)){
                 return res.status(401).send("Incorrect password")
             }
-            res.status(200).json({access_token:user.generateJWT()})
+            const token=user.generateJWT()
+            res.header('auth-token',token).send(token);
         }catch(e){
             return res.status(409).send(e);
         } 
